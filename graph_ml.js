@@ -59,22 +59,6 @@ function update(source) {
     .attr("r", 1e-6)
     .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
 
-
-  nodeEnter.append("svg:text")
-    .attr("x", function(d) { return d.children ? -15 : 0; })
-    .attr("dy", function(d) { return d.children ? "1.35em" : "2.35em"; })
-    .attr("text-anchor", function(d) { return d.children ? "end" : "middle"; })
-    .text(function(d) { return d.count + " samples"; })
-    .style("fill-opacity", 1e-6);
-
-  nodeEnter.append("svg:text")
-    .attr("x", function(d) { return d.children ? -15 : 0; })
-    .attr("dy", function(d) { return d.children ? "0.35em" : "3.35em"; })
-    .attr("text-anchor", function(d) { return d.children ? "end" : "middle"; })
-    .text(function(d) { return d.name; })
-    .style("fill-opacity", 1e-6);
-
-
   // Transition nodes to their new position.
   var nodeUpdate = node.transition()
     .duration(duration)
@@ -85,10 +69,6 @@ function update(source) {
     .style("cursor", function(d) { return d.children || d._children ? "pointer" : ""; })
     .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
-  nodeUpdate.selectAll("text")
-    .style("fill-opacity", 1);
-
-
   // Transition exiting nodes to the parent's new position.
   var nodeExit = node.exit().transition()
     .duration(duration)
@@ -97,9 +77,6 @@ function update(source) {
 
   nodeExit.select("circle")
     .attr("r", 1e-6);
-
-  nodeExit.select("text")
-  .style("fill-opacity", 1e-6);
 
   // Update the links…
   var link = vis.selectAll("path.link")

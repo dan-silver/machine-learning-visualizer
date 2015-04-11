@@ -8,8 +8,7 @@ import random
 
 # dummy data:
 import dummy_data
-labels = ['Age', 'Weight', 'Hair Color']
-data = dummy_data.generate(20*1000, len(labels))
+data, labels = dummy_data.generate(20*1000, ['Age', 'Weight', 'Hair Color'])
 
 # create decision tree
 dt = DecisionTreeClassifier()
