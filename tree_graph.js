@@ -18,3 +18,10 @@ function transformPath(decisionPath) {
 	path.push({feature: decisionPath[decisionPath.length-1].feature, level: decisionPath.length})
 	return path;
 }
+
+var tip_features = {
+  feature: function(d) { return 'Feature: ' + d.feature },
+  count: function(d) { return d.count + ' samples' },
+  dataPercentage: function(d) { return d.dataPercentage + '% of the data'},
+  impurity: function(d) { return 'Impurity: ' + d.impurity}
+}

@@ -7,11 +7,12 @@ from sklearn import tree
 import json
 import random
 from math import log10, floor
-def round_sig(x, sig=2):
+
+def round_sig(x, sig=4):
   return round(x, sig-int(floor(log10(x)))-1)
 
 import dummy_data
-data, labels = dummy_data.generate(20*1000, ['Age', 'Weight', 'Hair Color'])
+data, labels = dummy_data.generate(20*1000, ['Age', 'Weight', 'Hair Color', 'Birth City', 'Current City'])
 
 # create decision tree
 dt = DecisionTreeClassifier()
@@ -20,7 +21,7 @@ dt.fit(data[0], data[1])
 def print_tree(t, side, root=0):
     left_child = t.children_left[root]
     right_child = t.children_right[root]
-    dataPercentage = round_sig(t.n_node_samples[root] / dt.tree_.n_node_samples[0] * 100, 4) # this nodes count / the root nodes count
+    dataPercentage = round_sig(t.n_node_samples[root] / dt.tree_.n_node_samples[0] * 100) # this nodes count / the root nodes count
     if left_child == sklearn.tree._tree.TREE_LEAF:
         return {
             'name': 'leaf',
@@ -37,7 +38,7 @@ def print_tree(t, side, root=0):
             'featureIdx': t.feature[root],
             'threshold': t.threshold[root],
             'count': t.n_node_samples[root],
-            'impurity': t.impurity[root],
+            'impurity': round_sig(t.impurity[root]),
             'children': [left_child, right_child],
             'dataPercentage': dataPercentage
         }

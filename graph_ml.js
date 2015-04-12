@@ -16,12 +16,11 @@ var vis = d3.select("#tree").append("svg:svg")
   .append("svg:g")
   .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-function updateDescendantPath(descendantPath) {
-  //remove all old text, not sure why it's not updating automatically
+function updateDescendantPath(path) {
   vis.selectAll("text").remove()
 
   var level = vis.selectAll("text")
-    .data(descendantPath);
+    .data(path);
 
   level.enter()
     .append("text")
@@ -35,8 +34,6 @@ function updateDescendantPath(descendantPath) {
     })
     .on('mouseover', function(d) {tip.show(d)})
     .on('mouseout', tip.hide);
-    //   level.exit()
-    // .remove();
 }
 
 d3.json("server/data.json", function(json) {
@@ -67,12 +64,10 @@ var colors = scheme.from_hue(216)
 
 var tip = d3.tip().attr('class', 'd3-tip').html(function(d) {
   var s = [];
-  if (d.feature) // leafs don't have features
-    s.push('Feature: ' + d.feature);
-  if (d.count)
-    s.push(d.count + ' samples');
-  if (d.dataPercentage)
-  s.push(d.dataPercentage + '% of the data');
+  for (var tip_attr in tip_features) {
+    if (d[tip_attr] != null)
+      s.push(tip_features[tip_attr](d));
+  }
   return s.join('<br>')
 });
 
