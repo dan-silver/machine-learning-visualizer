@@ -1,3 +1,4 @@
+from __future__ import division
 import pandas as pd
 import numpy as np
 from sklearn.tree import DecisionTreeClassifier
@@ -5,7 +6,9 @@ import sklearn.tree
 from sklearn import tree
 import json
 import random
-
+from math import log10, floor
+def round_sig(x, sig=2):
+  return round(x, sig-int(floor(log10(x)))-1)
 
 import dummy_data
 data, labels = dummy_data.generate(20*1000, ['Age', 'Weight', 'Hair Color'])
@@ -17,12 +20,13 @@ dt.fit(data[0], data[1])
 def print_tree(t, side, root=0):
     left_child = t.children_left[root]
     right_child = t.children_right[root]
-     
+    dataPercentage = round_sig(t.n_node_samples[root] / dt.tree_.n_node_samples[0] * 100, 4) # this nodes count / the root nodes count
     if left_child == sklearn.tree._tree.TREE_LEAF:
         return {
             'name': 'leaf',
             'side': side,
-            'count': t.n_node_samples[root]
+            'count': t.n_node_samples[root],
+            'dataPercentage': dataPercentage
         }
     else:
         left_child = print_tree(t, 'left', root=left_child)
@@ -34,7 +38,8 @@ def print_tree(t, side, root=0):
             'threshold': t.threshold[root],
             'count': t.n_node_samples[root],
             'impurity': t.impurity[root],
-            'children': [left_child, right_child]
+            'children': [left_child, right_child],
+            'dataPercentage': dataPercentage
         }
 
 nodes = print_tree(dt.tree_, 'top')
