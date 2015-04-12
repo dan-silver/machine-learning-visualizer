@@ -30,6 +30,7 @@ def print_tree(t, side, root=0):
         return {
             'side': side,
             'feature': labels[t.feature[root]],
+            'featureIdx': t.feature[root],
             'threshold': t.threshold[root],
             'count': t.n_node_samples[root],
             'impurity': t.impurity[root],

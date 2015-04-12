@@ -10,6 +10,7 @@ app.controller('tree', function ($scope) {
   //converts edges to nodes
   $scope.transformPath = function(decisionPath) {
     var path = []
+
     for (var i=1; i<decisionPath.length; i++) {
       path.push({
         feature: decisionPath[i-1].feature,
@@ -17,6 +18,8 @@ app.controller('tree', function ($scope) {
         threshold: decisionPath[i-1].threshold.toPrecision(5)
       })
     }
+    path.push({feature: decisionPath[decisionPath.length-1].feature})
+
     $scope.decisionPath = path;
   }
 });

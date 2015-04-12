@@ -33,9 +33,15 @@ d3.json("server/data.json", function(json) {
   }
 
   // Initialize the display to show a few nodes until a certain level.
-  toggleAll(root, 4);
+  toggleAll(root, 3);
   update(root);
 });
+
+  var scheme = new ColorScheme;
+  var colors = scheme.from_hue(216)
+        .scheme('tetrade')
+        .distance(1)
+        .colors();
 
 function update(source) {
   var duration = d3.event && d3.event.altKey ? 5000 : 500;
@@ -81,9 +87,14 @@ function update(source) {
       scope.$apply();
     });
 
+  function colorCircle(d) {
+    return d.featureIdx != null ? "#" + colors[d.featureIdx] : "gray"
+  }
+
   nodeEnter.append("svg:circle")
     .attr("r", 1e-6)
-    .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
+    .style("fill", function(d) {return d._children ? "lightsteelblue" : colorCircle(d); })
+    .style("stroke", colorCircle)
 
   // Transition nodes to their new position.
   var nodeUpdate = node.transition()
@@ -96,7 +107,7 @@ function update(source) {
   nodeUpdate.select("circle")
     .attr("r", 10)
     .style("cursor", function(d) { return d.children || d._children ? "pointer" : ""; })
-    .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+    .style("fill", function(d) {return tinycolor(colorCircle(d)).lighten(3).toString(); })
 
   // Transition exiting nodes to the parent's new position.
   var nodeExit = node.exit().transition()
