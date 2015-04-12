@@ -50,9 +50,9 @@ function update(source) {
   var node = vis.selectAll("g.node")
     .data(nodes, function(d) { return d.id || (d.id = ++i); });
 
-  function deselectAll() {
+  function setNodeProperty(property, value) {
       tree.nodes(root).forEach(function(d) {
-        d.highlight = false;
+        d[property] = value;
       })
   }
 
@@ -63,8 +63,8 @@ function update(source) {
     .on("click", function(d) { toggle(d); update(d); })
     .on("mouseover", function(d) {
       var scope = getScope();
-      scope.decisionPath = []
-      deselectAll()
+      var path = []
+      setNodeProperty('highlight', false)
       var node = d;
       while(node) {
         var decisionPathNode = {
@@ -72,9 +72,10 @@ function update(source) {
           threshold: node.threshold,
           side: node.side
         }
-        scope.decisionPath.unshift(decisionPathNode)
+        path.unshift(decisionPathNode)
         node.highlight = true;
         node = node.parent;
+        scope.transformPath(path)
       }
       update(root)
       scope.$apply();
