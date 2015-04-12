@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="ml">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <title>Collapsible Tree Example</title>
@@ -12,15 +12,10 @@
     <script type="text/javascript" src="bower_components/d3-tip/index.js"></script>
 
   </head>
-  <body ng-controller="tree" id="decision-tree">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-rc.0/angular.min.js"></script>
+  <body id="decision-tree">
     <div class="container">
-      <div class="col-md-9">
+      <div class="col-md-12">
         <div id="tree"></div>
-      </div>
-      <div class="col-md-3">
-        <h2>Decision Path</h2>
-        <div ng-repeat="node in decisionPath">{{node.feature}} {{node.side}} {{node.threshold}}</div>
       </div>
     </div>
     <script src="graph_ml.js"></script>

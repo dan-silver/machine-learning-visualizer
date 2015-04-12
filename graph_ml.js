@@ -2,8 +2,7 @@ var m = [20, 120, 20, 120],
     w = 700 - m[1] - m[3],
     h = 1000 - m[0] - m[2],
     i = 0,
-    root,
-    descendantPath = [];
+    root;
 
 var tree = d3.layout.tree()
   .size([w, h]);
@@ -16,6 +15,28 @@ var vis = d3.select("#tree").append("svg:svg")
   .attr("height", h + m[0] + m[2])
   .append("svg:g")
   .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+
+function updateDescendantPath(descendantPath) {
+  //remove all old text, not sure why it's not updating automatically
+  vis.selectAll("text").remove()
+
+  var level = vis.selectAll("text")
+    .data(descendantPath);
+
+  level.enter()
+    .append("text")
+    .attr("x", 700 - m[1] - m[3] - 10)
+    .attr("y", function(d) {
+      return 100 + 15 * d.level;
+    })
+    .attr("class", "descendant-path")
+    .text(function(d) {
+      return (d.feature || "") + " " + (d.side || "") + " " + (d.threshold || "")  
+    });
+
+    //   level.exit()
+    // .remove();
+}
 
 d3.json("server/data.json", function(json) {
   root = json;
@@ -77,7 +98,6 @@ function update(source) {
     .attr("transform", function(d) { return "translate(" + source.x0 + "," + source.y0 + ")"; })
     .on("click", function(d) { toggle(d); update(d); })
     .on("mouseover", function(d) {
-      var scope = getScope();
       var path = []
       setNodeProperty('highlight', false)
       var node = d;
@@ -90,10 +110,9 @@ function update(source) {
         path.unshift(decisionPathNode)
         node.highlight = true;
         node = node.parent;
-        scope.transformPath(path)
       }
+      updateDescendantPath(transformPath(path));
       update(root)
-      scope.$apply();
       tip.show(d)
     })
     .on('mouseout', tip.hide);
