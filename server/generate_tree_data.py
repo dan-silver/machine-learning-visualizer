@@ -6,7 +6,7 @@ from sklearn import tree
 import json
 import random
 
-# dummy data:
+
 import dummy_data
 data, labels = dummy_data.generate(20*1000, ['Age', 'Weight', 'Hair Color'])
 
@@ -14,36 +14,29 @@ data, labels = dummy_data.generate(20*1000, ['Age', 'Weight', 'Hair Color'])
 dt = DecisionTreeClassifier()
 dt.fit(data[0], data[1])
 
-def print_tree(t, root=0):
+def print_tree(t, side, root=0):
     left_child = t.children_left[root]
     right_child = t.children_right[root]
      
-    if left_child != sklearn.tree._tree.TREE_LEAF:
-        this_branch = {
-        	'name': '%s < %.2f' % (labels[t.feature[root]], t.threshold[root]),
-        	'count': t.n_node_samples[root],
-        	'impurity': t.impurity[root]
+    if left_child == sklearn.tree._tree.TREE_LEAF:
+        return {
+            'name': 'leaf',
+            'side': side,
+            'count': t.n_node_samples[root]
+        }
+    else:
+        left_child = print_tree(t, 'left', root=left_child)
+        right_child = print_tree(t, 'right', root=right_child)
+        return {
+            'side': side,
+            'feature': labels[t.feature[root]],
+            'threshold': t.threshold[root],
+            'count': t.n_node_samples[root],
+            'impurity': t.impurity[root],
+            'children': [left_child, right_child]
         }
 
-        children = []
-        left_child = print_tree(t, root=left_child)
-        right_child = print_tree(t, root=right_child)
-        if left_child:
-          children.append(left_child)
-        if right_child:
-          children.append(right_child)
-        
-        this_branch['children'] = children
-    	return this_branch
-    else:
-      return {
-        'name': 'leaf',
-        'count': t.n_node_samples[root]
-      }
-
-
-
-nodes = print_tree(dt.tree_)
+nodes = print_tree(dt.tree_, 'top')
 
 # hack to generate png from python
 # import os

@@ -62,19 +62,22 @@ function update(source) {
     .attr("transform", function(d) { return "translate(" + source.x0 + "," + source.y0 + ")"; })
     .on("click", function(d) { toggle(d); update(d); })
     .on("mouseover", function(d) {
-      getScope().decisionPath = []
+      var scope = getScope();
+      scope.decisionPath = []
       deselectAll()
       var node = d;
-      while(node != null) {
-        getScope().decisionPath.unshift({
-          name: node.name,
-          count: node.count
-        })
-        getScope().$apply();
+      while(node) {
+        var decisionPathNode = {
+          feature: node.feature,
+          threshold: node.threshold,
+          side: node.side
+        }
+        scope.decisionPath.unshift(decisionPathNode)
         node.highlight = true;
         node = node.parent;
       }
       update(root)
+      scope.$apply();
     });
 
   nodeEnter.append("svg:circle")

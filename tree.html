@@ -15,7 +15,7 @@
       </div>
       <div class="col-md-3">
         <h2>Decision Path</h2>
-        <div ng-repeat="node in decisionPath">{{node.name}}</div>
+        <div ng-repeat="node in decisionPath">{{node.feature}} {{node.side}} {{node.threshold}}</div>
       </div>
     </div>
     <script src="graph_ml.js"></script>
