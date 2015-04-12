@@ -2,12 +2,18 @@ function transformPath(decisionPath) {
 	var path = []
 
 	for (var i=1; i<decisionPath.length; i++) {
-		path.push({
+		var node = {
 			feature: decisionPath[i-1].feature,
 			side: decisionPath[i].side == 'left' ? "<=" : ">",
 			threshold: decisionPath[i-1].threshold.toPrecision(5),
 			level: i
-		})
+		}
+		//copy all properties of decisionPath[i] to node if they won't overide a property
+		for (var attrname in decisionPath[i]) {
+			if (node[attrname] == null)
+				node[attrname] = decisionPath[i][attrname];
+		}
+		path.push(node)
 	}
 	path.push({feature: decisionPath[decisionPath.length-1].feature, level: decisionPath.length})
 	return path;

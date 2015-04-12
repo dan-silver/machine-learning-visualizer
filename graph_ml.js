@@ -1,5 +1,5 @@
-var m = [20, 120, 20, 120],
-    w = 700 - m[1] - m[3],
+var m = [20, 200, 20, 120],
+    w = 800 - m[1] - m[3],
     h = 1000 - m[0] - m[2],
     i = 0,
     root;
@@ -25,15 +25,16 @@ function updateDescendantPath(descendantPath) {
 
   level.enter()
     .append("text")
-    .attr("x", 700 - m[1] - m[3] - 10)
+    .attr("x", 500)
     .attr("y", function(d) {
-      return 100 + 15 * d.level;
+      return 100 + 20 * d.level;
     })
     .attr("class", "descendant-path")
     .text(function(d) {
       return (d.feature || "") + " " + (d.side || "") + " " + (d.threshold || "")  
-    });
-
+    })
+    .on('mouseover', function(d) {tip.show(d)})
+    .on('mouseout', tip.hide);
     //   level.exit()
     // .remove();
 }
@@ -64,11 +65,14 @@ var colors = scheme.from_hue(216)
       .distance(1)
       .colors();
 
-tip = d3.tip().attr('class', 'd3-tip').html(function(d) {
+var tip = d3.tip().attr('class', 'd3-tip').html(function(d) {
   var s = [];
   if (d.feature) // leafs don't have features
     s.push('Feature: ' + d.feature);
-  s.push(d.count + ' samples');
+  if (d.count)
+    s.push(d.count + ' samples');
+  if (d.dataPercentage)
+  s.push(d.dataPercentage + '% of the data');
   return s.join('<br>')
 });
 
@@ -102,12 +106,7 @@ function update(source) {
       setNodeProperty('highlight', false)
       var node = d;
       while(node) {
-        var decisionPathNode = {
-          feature: node.feature,
-          threshold: node.threshold,
-          side: node.side
-        }
-        path.unshift(decisionPathNode)
+        path.unshift(node)
         node.highlight = true;
         node = node.parent;
       }
