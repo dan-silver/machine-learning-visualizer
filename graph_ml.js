@@ -1,5 +1,5 @@
 var m = [20, 120, 20, 120],
-    w = 800 - m[1] - m[3],
+    w = 700 - m[1] - m[3],
     h = 1000 - m[0] - m[2],
     i = 0,
     root,
@@ -11,7 +11,7 @@ var tree = d3.layout.tree()
 var diagonal = d3.svg.diagonal()
   .projection(function(d) { return [d.x, d.y]; });
 
-var vis = d3.select("body").append("svg:svg")
+var vis = d3.select("#tree").append("svg:svg")
   .attr("width", w + m[1] + m[3])
   .attr("height", h + m[0] + m[2])
   .append("svg:g")
@@ -62,11 +62,15 @@ function update(source) {
     .attr("transform", function(d) { return "translate(" + source.x0 + "," + source.y0 + ")"; })
     .on("click", function(d) { toggle(d); update(d); })
     .on("mouseover", function(d) {
-      descendantPath = []
+      getScope().decisionPath = []
       deselectAll()
       var node = d;
       while(node != null) {
-        descendantPath.push(node)
+        getScope().decisionPath.unshift({
+          name: node.name,
+          count: node.count
+        })
+        getScope().$apply();
         node.highlight = true;
         node = node.parent;
       }
@@ -121,12 +125,7 @@ function update(source) {
         return "10px"
       }
     })
-    .duration(function(d) {
-      if (d.target.highlight)
-        return 0
-      else
-        return duration
-    })
+    .duration(duration)
     .attr("d", diagonal);
 
   // Transition exiting nodes to the parent's new position.

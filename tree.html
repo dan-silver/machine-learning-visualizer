@@ -1,15 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Collapsible Tree Example</title>
-  <link rel="stylesheet" type="text/css" href="styles.css">
-</head>
-<body>
-
-  <!-- load the d3.js library --> 
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  
-  <script src="graph_ml.js"></script>
-</body>
+<html lang="en" ng-app="ml">
+  <head>
+    <meta charset="utf-8">
+    <title>Collapsible Tree Example</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  </head>
+  <body ng-controller="tree">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-rc.0/angular.min.js"></script>
+    <div class="container">
+      <div class="col-md-9">
+        <div id="tree"></div>
+      </div>
+      <div class="col-md-3">
+        <h2>Decision Path</h2>
+        <div ng-repeat="node in decisionPath">{{node.name}}</div>
+      </div>
+    </div>
+    <script src="graph_ml.js"></script>
+    <script src="tree_graph.js"></script>
+  </body>
 </html>
