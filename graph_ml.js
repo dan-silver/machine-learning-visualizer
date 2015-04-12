@@ -1,8 +1,9 @@
 var m = [20, 120, 20, 120],
-    w = 1280 - m[1] - m[3],
+    w = 800 - m[1] - m[3],
     h = 1000 - m[0] - m[2],
     i = 0,
-    root;
+    root,
+    descendantPath = [];
 
 var tree = d3.layout.tree()
   .size([w, h]);
@@ -32,7 +33,7 @@ d3.json("server/data.json", function(json) {
   }
 
   // Initialize the display to show a few nodes until a certain level.
-  toggleAll(root, 3);
+  toggleAll(root, 4);
   update(root);
 });
 
@@ -49,11 +50,28 @@ function update(source) {
   var node = vis.selectAll("g.node")
     .data(nodes, function(d) { return d.id || (d.id = ++i); });
 
+  function deselectAll() {
+      tree.nodes(root).forEach(function(d) {
+        d.highlight = false;
+      })
+  }
+
   // Enter any new nodes at the parent's previous position.
   var nodeEnter = node.enter().append("svg:g")
     .attr("class", "node")
     .attr("transform", function(d) { return "translate(" + source.x0 + "," + source.y0 + ")"; })
     .on("click", function(d) { toggle(d); update(d); })
+    .on("mouseover", function(d) {
+      descendantPath = []
+      deselectAll()
+      var node = d;
+      while(node != null) {
+        descendantPath.push(node)
+        node.highlight = true;
+        node = node.parent;
+      }
+      update(root)
+    });
 
   nodeEnter.append("svg:circle")
     .attr("r", 1e-6)
@@ -62,7 +80,10 @@ function update(source) {
   // Transition nodes to their new position.
   var nodeUpdate = node.transition()
     .duration(duration)
-    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .each("end", function(d) {
+      
+    });
 
   nodeUpdate.select("circle")
     .attr("r", 10)
@@ -95,7 +116,17 @@ function update(source) {
 
   // Transition links to their new position.
   link.transition()
-    .duration(duration)
+    .style("stroke-width", function(d) {
+      if (d.target.highlight) {
+        return "10px"
+      }
+    })
+    .duration(function(d) {
+      if (d.target.highlight)
+        return 0
+      else
+        return duration
+    })
     .attr("d", diagonal);
 
   // Transition exiting nodes to the parent's new position.
