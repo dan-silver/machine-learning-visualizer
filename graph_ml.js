@@ -37,11 +37,19 @@ d3.json("server/data.json", function(json) {
   update(root);
 });
 
-  var scheme = new ColorScheme;
-  var colors = scheme.from_hue(216)
-        .scheme('tetrade')
-        .distance(1)
-        .colors();
+var scheme = new ColorScheme;
+var colors = scheme.from_hue(216)
+      .scheme('tetrade')
+      .distance(1)
+      .colors();
+
+tip = d3.tip().attr('class', 'd3-tip').html(function(d) {
+  var s = [];
+  if (d.feature) // leafs don't have features
+    s.push('Feature: ' + d.feature);
+  s.push(d.count + ' samples');
+  return s.join('<br>')
+});
 
 function update(source) {
   var duration = d3.event && d3.event.altKey ? 5000 : 500;
@@ -55,6 +63,7 @@ function update(source) {
   // Update the nodes…
   var node = vis.selectAll("g.node")
     .data(nodes, function(d) { return d.id || (d.id = ++i); });
+  vis.call(tip)
 
   function setNodeProperty(property, value) {
       tree.nodes(root).forEach(function(d) {
@@ -85,7 +94,9 @@ function update(source) {
       }
       update(root)
       scope.$apply();
-    });
+      tip.show(d)
+    })
+    .on('mouseout', tip.hide);
 
   function colorCircle(d) {
     return d.featureIdx != null ? "#" + colors[d.featureIdx] : "gray"

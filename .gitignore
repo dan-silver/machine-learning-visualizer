@@ -1,2 +1,4 @@
 *.pyc
 server/data.json
+bower_components/
+server/npm-debug.log

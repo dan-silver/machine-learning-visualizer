@@ -14,3 +14,9 @@
   stroke-width: 3px;
 /*  -webkit-transition: stroke-width .3s ease;*/
 }
+
+/* Tips */
+#decision-tree .d3-tip {
+  line-height: 1.3em;
+  text-align: center;
+}
