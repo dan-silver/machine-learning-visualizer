@@ -31,6 +31,7 @@ users.each do |user|
 end
 
 CSV.open("tweets.csv", "w") do |csv|
+  csv << ['text', 'screen_name'] # first row is header
   tweets.each do |tweet|
     csv << [tweet.text, tweet.user.screen_name]
   end

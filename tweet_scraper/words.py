@@ -1,27 +1,34 @@
-from sklearn.datasets import fetch_20newsgroups
-from sklearn.feature_extraction.text import CountVectorizer
-count_vect = CountVectorizer()
-
-categories = ['alt.atheism', 'soc.religion.christian', 'comp.graphics', 'sci.med']
-twenty_train = fetch_20newsgroups(subset='train',categories=categories, shuffle=True, random_state=42)
-
-from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.cross_validation import train_test_split
+from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
+import pandas as pd
+import numpy as np
+
+data = pd.read_csv('tweets.csv')
+train, test = train_test_split(data, test_size=0.2, random_state=42)
+
+# generate training data
+train_data   = train[:, 0]
+train_labels = train[:, 1].tolist()
+
+# Generate test data
+test_data   = test[:, 0]
+test_labels = test[:, 1].tolist()
+
+
 text_clf = Pipeline([('vect', CountVectorizer()),
                       ('tfidf', TfidfTransformer()),
                       ('clf', MultinomialNB()),
 ])
 
 
-# Training a classifier
-docs_new = ['God is love', 'OpenGL on the GPU is fast']
-text_clf = text_clf.fit(twenty_train.data, twenty_train.target)
+# Train the classifier
+text_clf = text_clf.fit(train_data, train_labels)
 
 
+# Predictions on the test set
+predicted = text_clf.predict(test_data)
 
-# Predictions
-predicted = text_clf.predict(docs_new)
-
-for doc, category in zip(docs_new, predicted):
-	print('%r => %s' % (doc, twenty_train.target_names[category]))
+# determine the accuracy
+print np.mean(predicted == test_labels)
