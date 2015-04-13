@@ -52,7 +52,7 @@ d3.json("server/data.json", function(json) {
   }
 
   // Initialize the display to show a few nodes until a certain level.
-  toggleAll(root, 3);
+  toggleAll(root, 4);
   update(root);
 });
 
@@ -161,7 +161,7 @@ function update(source) {
   link.transition()
     .style("stroke-width", function(d) {
       if (d.target.highlight) {
-        return "10px"
+        return "11px"
       }
     })
     .duration(duration)
