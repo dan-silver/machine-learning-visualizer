@@ -22,10 +22,8 @@ text_clf = Pipeline([('vect', CountVectorizer()),
                       ('clf', MultinomialNB()),
 ])
 
-
 # Train the classifier
 text_clf = text_clf.fit(train_data, train_labels)
-
 
 # Predictions on the test set
 predicted = text_clf.predict(test_data)
