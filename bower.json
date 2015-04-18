@@ -1,0 +1,20 @@
+{
+  "name": "machine-learning-visualizer",
+  "version": "0.0.1",
+  "homepage": "https://github.com/dan-silver/machine-learning-visualizer",
+  "authors": [
+    "Dan Silver <dannysilver3@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3-tip": "~0.6.6",
+    "tinycolor": "~1.1.2"
+  }
+}
