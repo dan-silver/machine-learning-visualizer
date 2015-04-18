@@ -3,3 +3,4 @@ server/data.json
 bower_components/
 npm-debug.log
 tweet_scraper/keys.yml
+data.json

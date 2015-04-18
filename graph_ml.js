@@ -36,7 +36,7 @@ function updateDescendantPath(path) {
     .on('mouseout', tip.hide);
 }
 
-d3.json("server/data.json", function(json) {
+d3.json("data.json", function(json) {
   root = json;
   root.x0 = h / 2;
   root.y0 = 0;
