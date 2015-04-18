@@ -30,6 +30,8 @@ function updateDescendantPath(path) {
     .attr("transform", function(d) {
       return "translate(500," + (100 + 20 * d.level) + ")";
     })
+    .on('mouseover', tip.show)
+    .on('mouseout', tip.hide);
 
   levelGroupEnter.append("text")
     .attr("class", "descendant-path")
