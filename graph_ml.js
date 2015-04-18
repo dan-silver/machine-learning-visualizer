@@ -17,23 +17,43 @@ var vis = d3.select("#tree").append("svg:svg")
   .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
 function updateDescendantPath(path) {
-  vis.selectAll("text").remove()
+  var path_x = 500;
 
-  var level = vis.selectAll("text")
+  vis.selectAll("g.path-group").remove()
+
+  var level = vis.selectAll("g.path-group")
     .data(path);
 
-  level.enter()
-    .append("text")
-    .attr("x", 500)
-    .attr("y", function(d) {
-      return 100 + 20 * d.level;
+  var levelGroupEnter = level.enter()
+    .append("g")
+    .attr("class", "path-group")
+    .attr("transform", function(d) {
+      return "translate(500," + (100 + 20 * d.level) + ")";
     })
+
+  levelGroupEnter.append("text")
     .attr("class", "descendant-path")
     .text(function(d) {
-      return (d.feature || "") + " " + (d.side || "") + " " + (d.threshold || "")  
+      return (d.feature || "") + " " + (d.side || "") + " " + (d.threshold || "")
     })
-    .on('mouseover', function(d) {tip.show(d)})
-    .on('mouseout', tip.hide);
+
+  levelGroupEnter.append("circle")
+    .attr("r", 8)
+    .attr("cx", -10)
+    .attr("cy", -6)
+    .style("fill", function(d) {
+      return colorCircle(d)
+    })
+    .on('mouseover', function(d) {
+      console.log(d)
+    })
+
+  var levelExit = level.exit()
+    .remove()
+
+  levelExit.select("g")
+    .remove()
+
 }
 
 d3.json("data.json", function(json) {
@@ -71,6 +91,10 @@ var tip = d3.tip().attr('class', 'd3-tip').html(function(d) {
   return s.join('<br>')
 });
 
+function colorCircle(d) {
+  return d.featureIdx != null ? "#" + colors[d.featureIdx] : "gray"
+}
+
 function update(source) {
   var duration = d3.event && d3.event.altKey ? 5000 : 500;
 
@@ -97,6 +121,7 @@ function update(source) {
     .attr("transform", function(d) { return "translate(" + source.x0 + "," + source.y0 + ")"; })
     .on("click", function(d) { toggle(d); update(d); })
     .on("mouseover", function(d) {
+      console.log(d)
       var path = []
       setNodeProperty('highlight', false)
       var node = d;
@@ -111,9 +136,6 @@ function update(source) {
     })
     .on('mouseout', tip.hide);
 
-  function colorCircle(d) {
-    return d.featureIdx != null ? "#" + colors[d.featureIdx] : "gray"
-  }
 
   nodeEnter.append("svg:circle")
     .attr("r", 1e-6)
@@ -123,10 +145,7 @@ function update(source) {
   // Transition nodes to their new position.
   var nodeUpdate = node.transition()
     .duration(duration)
-    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-    .each("end", function(d) {
-      
-    });
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
   nodeUpdate.select("circle")
     .attr("r", 10)

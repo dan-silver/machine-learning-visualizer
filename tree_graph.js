@@ -6,6 +6,7 @@ function transformPath(decisionPath) {
 			feature: decisionPath[i-1].feature,
 			side: decisionPath[i].side == 'left' ? "<=" : ">",
 			threshold: decisionPath[i-1].threshold.toPrecision(5),
+			featureIdx: decisionPath[i-1].featureIdx,
 			level: i
 		}
 		//copy all properties of decisionPath[i] to node if they won't overide a property
@@ -15,7 +16,7 @@ function transformPath(decisionPath) {
 		}
 		path.push(node)
 	}
-	path.push({feature: decisionPath[decisionPath.length-1].feature, level: decisionPath.length})
+
 	return path;
 }
 
