@@ -2,6 +2,7 @@ from sklearn.tree import DecisionTreeClassifier
 import dummy_data
 from convert_tree_to_json import ConvertTreeToJSON
 
+# Generate some data
 data, labels = dummy_data.generate(20*1000, ['Age', 'Weight', 'Hair Color', 'Birth City', 'Current City'])
 
 # Create a decision tree - http://scikit-learn.org/stable/modules/tree.html#classification
