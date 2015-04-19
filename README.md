@@ -6,12 +6,12 @@ Video of decision tree path visualization - https://www.youtube.com/watch?v=Attp
 
 
 ### Visualizing a decision tree
-1.  Create a decision tree with scikit-learn's DecisionTreeClassifier
-2.  Generate json from the tree's structure
+1.  Create a decision tree with scikit-learn's [DecisionTreeClassifier](http://scikit-learn.org/stable/modules/tree.html#classification)
+2.  Generate json from the tree's structure using [ConvertTreeToJSON](https://github.com/dan-silver/machine-learning-visualizer/blob/master/visualize_d_tree_generator/convert_tree_to_json.py)
 3.  (Temporary) Use a webserver to serve the SVG.  ```python -m SimpleHTTPServer```
 4.  (Temporary) Visit localhost:8000/tree.html
 
-From sample_tree.py
+From [sample_tree.py](https://github.com/dan-silver/machine-learning-visualizer/blob/master/visualize_d_tree_generator/sample_tree.py)
 ```python
 from sklearn.tree import DecisionTreeClassifier
 import dummy_data
@@ -24,12 +24,10 @@ dt = DecisionTreeClassifier()
 dt.fit(data[0], data[1])
 
 # Generate JSON that represents the tree's structure
-json_generator = ConvertTreeToJSON(dt, labels)
-json = json_generator.convert()
+json = ConvertTreeToJSON(dt, labels).convert()
 
 # Save the json to a file
 text_file = open("data.json", "w")
 text_file.write(json)
 text_file.close()
 ```
-
