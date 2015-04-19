@@ -1,5 +1,4 @@
 from __future__ import division
-from sklearn.tree import DecisionTreeClassifier
 import sklearn.tree
 from sklearn import tree
 import json
