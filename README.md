@@ -9,7 +9,7 @@ Video of decision tree path visualization - https://www.youtube.com/watch?v=Attp
 1.  Create a decision tree with scikit-learn's [DecisionTreeClassifier](http://scikit-learn.org/stable/modules/tree.html#classification)
 2.  Generate json from the tree's structure using [ConvertTreeToJSON](https://github.com/dan-silver/machine-learning-visualizer/blob/master/visualize_d_tree_generator/convert_tree_to_json.py)
 3.  (Temporary) Use a webserver to serve the SVG.  ```python -m SimpleHTTPServer```
-4.  (Temporary) Visit localhost:8000/tree.html
+4.  (Temporary) Visit http://localhost:8000/static/tree.html
 
 From [sample_tree.py](https://github.com/dan-silver/machine-learning-visualizer/blob/master/visualize_d_tree_generator/sample_tree.py)
 ```python
