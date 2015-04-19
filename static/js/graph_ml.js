@@ -46,9 +46,6 @@ function updateDescendantPath(path) {
     .style("fill", function(d) {
       return colorCircle(d)
     })
-    .on('mouseover', function(d) {
-      console.log(d)
-    })
 
   var levelExit = level.exit()
     .remove()
@@ -58,7 +55,7 @@ function updateDescendantPath(path) {
 
 }
 
-d3.json("data.json", function(json) {
+d3.json("/data.json", function(json) {
   root = json;
   root.x0 = h / 2;
   root.y0 = 0;
@@ -123,7 +120,6 @@ function update(source) {
     .attr("transform", function(d) { return "translate(" + source.x0 + "," + source.y0 + ")"; })
     .on("click", function(d) { toggle(d); update(d); })
     .on("mouseover", function(d) {
-      console.log(d)
       var path = []
       setNodeProperty('highlight', false)
       var node = d;

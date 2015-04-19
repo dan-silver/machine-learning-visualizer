@@ -17,10 +17,11 @@ test_data   = test[:, 0]
 test_labels = test[:, 1].tolist()
 
 
-text_clf = Pipeline([('vect', CountVectorizer()),
-                      ('tfidf', TfidfTransformer()),
-                      ('clf', MultinomialNB()),
-])
+text_clf = Pipeline([
+						('vect', CountVectorizer()),
+                    	('tfidf', TfidfTransformer()),
+                    	('clf', MultinomialNB()),
+					])
 
 # Train the classifier
 text_clf = text_clf.fit(train_data, train_labels)
